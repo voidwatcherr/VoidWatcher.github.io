@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VoidWatcher — Web3 Creator Portfolio</title>
+<meta name="description" content="VoidWatcher's Web3 creator, community and moderation portfolio.">
+<style>
+  :root{
+    --bg:#050505;
+    --panel:#0b0b0b;
+    --panel2:#101010;
+    --line:#252525;
+    --text:#f2f2f2;
+    --muted:#8b8b8b;
+    --soft:#b8b8b8;
+    --max:1240px;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+
+  .wrap{width:min(var(--max),calc(100% - 48px));margin:auto}
+
+  header{
+    height:88px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    align-items:center;
+  }
+  .brand{
+    font-size:20px;
+    font-weight:650;
+    letter-spacing:-.03em;
+  }
+  nav{margin-left:auto;display:flex;gap:28px}
+  nav a{font-size:13px;color:var(--muted);transition:.2s}
+  nav a:hover{color:var(--text)}
+
+  .hero{
+    min-height:calc(100vh - 88px);
+    display:flex;
+    align-items:center;
+    border-bottom:1px solid var(--line);
+    padding:90px 0 110px;
+  }
+  .eyebrow{
+    display:flex;
+    justify-content:space-between;
+    color:#686868;
+    font:12px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+  }
+  h1{
+    margin:70px 0 30px;
+    font-size:clamp(70px,13vw,180px);
+    line-height:.82;
+    letter-spacing:-.075em;
+    font-weight:650;
+    white-space:nowrap;
+  }
+  .hero-rule{height:1px;background:var(--line);max-width:900px}
+  .intro{
+    margin-top:42px;
+    max-width:780px;
+    font-size:clamp(25px,3.1vw,43px);
+    line-height:1.15;
+    letter-spacing:-.04em;
+  }
+  .topics{
+    margin-top:26px;
+    color:#858585;
+    font-size:20px;
+    letter-spacing:-.02em;
+  }
+  .actions{display:flex;gap:14px;margin-top:42px}
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:52px;
+    padding:0 24px;
+    border:1px solid #303030;
+    border-radius:999px;
+    font-size:15px;
+    transition:.2s;
+  }
+  .btn.primary{background:#f4f4f4;color:#080808;border-color:#f4f4f4}
+  .btn:hover{transform:translateY(-2px)}
+
+  section{padding:110px 0;border-bottom:1px solid var(--line)}
+  .section-head{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:30px;
+    margin-bottom:38px;
+  }
+  .section-label{
+    color:#686868;
+    font:12px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+  }
+  h2{
+    margin:10px 0 0;
+    font-size:clamp(42px,6vw,82px);
+    line-height:.95;
+    letter-spacing:-.06em;
+    font-weight:600;
+  }
+  .section-note{max-width:420px;color:#777;font-size:14px;line-height:1.6}
+
+  /* Horizontal post rail */
+  .rail{
+    display:flex;
+    gap:18px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    padding:2px 0 20px;
+    scroll-snap-type:x mandatory;
+    scrollbar-width:none;
+    overscroll-behavior-x:contain;
+  }
+  .rail::-webkit-scrollbar{display:none}
+  .post{
+    flex:0 0 min(430px,78vw);
+    scroll-snap-align:start;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:2px;
+    overflow:hidden;
+  }
+
+  /* Consistent premium image treatment.
+     The image is slightly oversized and clipped so stray screenshot
+     scroll-bars/edge lines don't become visible. */
+  .media{
+    position:relative;
+    aspect-ratio:16/10;
+    overflow:hidden;
+    background:#090909;
+    border-bottom:1px solid var(--line);
+  }
+  .media img{
+    width:104%;
+    height:100%;
+    margin-left:-2%;
+    display:block;
+    object-fit:cover;
+    object-position:center;
+    filter:saturate(.92) contrast(1.02);
+  }
+  .media:after{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.025);
+  }
+
+  .post-body{padding:22px}
+  .tag{
+    color:#686868;
+    font:11px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+  }
+  .post h3{margin:13px 0 9px;font-size:21px;letter-spacing:-.03em}
+  .post p{margin:0;color:#8d8d8d;font-size:14px;line-height:1.55}
+  .post-foot{
+    display:flex;
+    justify-content:space-between;
+    gap:16px;
+    margin-top:22px;
+    color:#707070;
+    font:11px ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  .post-foot a:hover{color:#fff}
+
+  .work-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:18px;
+  }
+  .work{
+    border:1px solid var(--line);
+    padding:28px;
+    min-height:250px;
+    background:linear-gradient(145deg,#0b0b0b,#070707);
+  }
+  .work .role{color:#686868;font:11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase}
+  .work h3{font-size:29px;margin:15px 0 10px;letter-spacing:-.04em}
+  .work p{color:#8a8a8a;line-height:1.6;font-size:14px;max-width:600px}
+  .work-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .work-link{border:1px solid #292929;border-radius:999px;padding:9px 13px;color:#aaa;font-size:12px}
+  .work-link:hover{color:#fff;border-color:#555}
+
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border-top:1px solid var(--line);
+    border-left:1px solid var(--line);
+  }
+  .stat{
+    padding:28px;
+    min-height:150px;
+    border-right:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .stat strong{display:block;font-size:38px;letter-spacing:-.05em}
+  .stat span{display:block;margin-top:9px;color:#737373;font-size:12px;text-transform:uppercase;letter-spacing:.12em}
+
+  footer{padding:70px 0;color:#6d6d6d;font-size:12px}
+  footer strong{color:#eee;font-weight:600}
+
+  @media(max-width:800px){
+    .wrap{width:min(var(--max),calc(100% - 28px))}
+    header{height:72px}
+    nav{gap:14px}
+    nav a:nth-child(n+3){display:none}
+    .hero{min-height:auto;padding:72px 0 90px}
+    h1{font-size:clamp(64px,18vw,120px);margin-top:55px;white-space:normal;overflow-wrap:anywhere}
+    .topics{font-size:17px;line-height:1.5}
+    section{padding:78px 0}
+    .section-head{display:block}
+    .section-note{margin-top:20px}
+    .post{flex-basis:86vw}
+    .work-grid{grid-template-columns:1fr}
+    .stats{grid-template-columns:repeat(2,1fr)}
+  }
+
+  @media(max-width:480px){
+    .eyebrow{font-size:10px}
+    .actions{flex-wrap:wrap}
+    .btn{min-height:48px}
+    .stats strong{font-size:30px}
+    .stat{padding:20px}
+  }
+</style>
+</head>
+
+<body>
+<header>
+  <div class="wrap" style="display:flex;align-items:center;width:100%">
+    <div class="brand">VoidWatcher ⚡</div>
+    <nav>
+      <a href="#posts">Posts</a>
+      <a href="#work">Work</a>
+      <a href="#stats">Audience</a>
+      <a href="https://x.com/0xvoidwatcher" target="_blank" rel="noopener">X ↗</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow"><span>WEB3 / CRYPTO / INTERNET</span><span>2026</span></div>
+    <h1>VoidWatcher</h1>
+    <div class="hero-rule"></div>
+    <div class="intro">I create around crypto, internet culture &amp; whatever is moving the timeline.</div>
+    <div class="topics">NFTs · Memecoins · Web3 · Narratives · Community</div>
+    <div class="actions">
+      <a class="btn primary" href="https://x.com/0xvoidwatcher" target="_blank" rel="noopener">Follow on X ↗</a>
+      <a class="btn" href="mailto:voidwatcher08@gmail.com">Let's Collaborate ↗</a>
+    </div>
+  </div>
+</section>
+
+<section id="posts">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="section-label">01 / Selected posts</div>
+        <h2>What the feed looks like.</h2>
+      </div>
+      <div class="section-note">A selection of posts showing research, project discovery, NFT culture, narratives and CT-native personality. Swipe horizontally on mobile.</div>
+    </div>
+
+    <div class="rail">
+
+      <article class="post">
+        <div class="media"><img src="crypto-commentary.png" alt="VoidWatcher crypto commentary post"></div>
+        <div class="post-body">
+          <div class="tag">Crypto commentary</div>
+          <h3>Research over social proof.</h3>
+          <p>A sharp take on avoiding consensus-driven crypto theses and doing the actual research.</p>
+          <div class="post-foot"><span>258 views · 22 likes</span><a href="https://x.com/0xvoidwatcher/status/2090299791741952256?s=46" target="_blank" rel="noopener">VIEW ON X ↗</a></div>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="media"><img src="emerging-projects.png" alt="VoidWatcher emerging projects post"></div>
+        <div class="post-body">
+          <div class="tag">Emerging projects</div>
+          <h3>Project discovery &amp; analysis.</h3>
+          <p>Exploring Sight and the idea of prediction markets moving onchain through Robinhood.</p>
+          <div class="post-foot"><span>255 views · 22 likes</span><a href="https://x.com/0xvoidwatcher/status/2090537372329152968?s=46" target="_blank" rel="noopener">VIEW ON X ↗</a></div>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="media"><img src="nft-digital-culture.png" alt="VoidWatcher NFT and digital culture post"></div>
+        <div class="post-body">
+          <div class="tag">NFTs / digital culture</div>
+          <h3>Watching the details others miss.</h3>
+          <p>Calling out an unexpected mint-fee change and the onchain configuration behind it.</p>
+          <div class="post-foot"><span>460 views · 22 likes</span><a href="https://x.com/0xvoidwatcher/status/2090825632188088429?s=46" target="_blank" rel="noopener">VIEW ON X ↗</a></div>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="media"><img src="memecoins-narratives.png" alt="VoidWatcher memecoins and narratives post"></div>
+        <div class="post-body">
+          <div class="tag">Memecoins / narratives</div>
+          <h3>Don't marry a narrative.</h3>
+          <p>Why staying attached to yesterday's winning narrative can become the actual trade you lose.</p>
+          <div class="post-foot"><span>277 views · 15 likes</span><a href="https://x.com/0xvoidwatcher/status/2038233430581027010?s=46" target="_blank" rel="noopener">VIEW ON X ↗</a></div>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="media"><img src="airdrop-shitpost.png" alt="VoidWatcher airdrop farmers shitpost"></div>
+        <div class="post-body">
+          <div class="tag">Crypto Twitter / culture</div>
+          <h3>Airdrop farmer pain.</h3>
+          <p>CT-native shitposting around eligibility checkers, wallets and the realities of farming.</p>
+          <div class="post-foot"><span>512 views · 53 likes</span><a href="https://x.com/0xvoidwatcher/status/2047688650042020106?s=46" target="_blank" rel="noopener">VIEW ON X ↗</a></div>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="media"><img src="good-assets.png" alt="VoidWatcher good assets NFT post"></div>
+        <div class="post-body">
+          <div class="tag">Crypto Twitter / culture</div>
+          <h3>Never underestimate good assets.</h3>
+          <p>Personality-led NFT commentary with a real conviction story behind the post.</p>
+          <div class="post-foot"><span>368 views · 38 likes</span><a href="https://x.com/0xvoidwatcher/status/2093137521207345586?s=46" target="_blank" rel="noopener">VIEW ON X ↗</a></div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="section-label">02 / Community work</div>
+        <h2>Beyond the feed.</h2>
+      </div>
+      <div class="section-note">Community operations, moderation, onboarding and events across Web3 communities.</div>
+    </div>
+
+    <div class="work-grid">
+      <article class="work">
+        <div class="role">Ambassador · 2025 — Present</div>
+        <h3>Bless Network</h3>
+        <p>I represent Bless in community channels, help members, support onboarding, assist with community discussions, and contribute to events and community content including art and memes.</p>
+        <div class="work-links">
+          <a class="work-link" href="https://discord.com/channels/929539044742938634/1468866006968438835" target="_blank" rel="noopener">Event 01 ↗</a>
+          <a class="work-link" href="https://discord.com/channels/929539044742938634/1429182436381687848" target="_blank" rel="noopener">Event 02 ↗</a>
+        </div>
+      </article>
+
+      <article class="work">
+        <div class="role">Head Moderator · 2025 — Present</div>
+        <h3>Firewall</h3>
+        <p>I work on day-to-day moderation and community operations, help coordinate moderation, handle member issues, maintain discussion quality, and keep the community clear of spam, scams and disruptive activity.</p>
+        <div class="work-links">
+          <span class="work-link">Community moderation</span>
+          <span class="work-link">Operations</span>
+          <span class="work-link">Member support</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="stats">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="section-label">03 / Audience</div>
+        <h2>Built on attention, conversation &amp; consistency.</h2>
+      </div>
+      <div class="section-note">Current seven-day X analytics snapshot. Metrics are shown as provided, without inventing averages.</div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><strong>1,020</strong><span>X followers</span></div>
+      <div class="stat"><strong>62.6K</strong><span>7-day impressions</span></div>
+      <div class="stat"><strong>2.8K</strong><span>7-day engagements</span></div>
+      <div class="stat"><strong>4.5%</strong><span>Engagement rate</span></div>
+      <div class="stat"><strong>345</strong><span>Profile visits</span></div>
+      <div class="stat"><strong>1.5K</strong><span>Likes</span></div>
+      <div class="stat"><strong>873</strong><span>Replies</span></div>
+      <div class="stat"><strong>585</strong><span>Verified followers</span></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <strong>VoidWatcher ⚡</strong> · Web3 creator, community operator &amp; internet culture observer.
+  </div>
+</footer>
+</body>
+</html>
